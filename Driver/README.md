@@ -11,3 +11,8 @@ Para ver el modulo en kernel use el comando
 
 Para ver el log del driver use el comando
 ``` sudo dmesg | tail```
+
+Para retirar el module use el comando
+``` sudo rmmod driver ```
+
+El main es un programa que envía un 1 al arduino y el arduino debería encender un led
