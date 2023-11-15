@@ -5,10 +5,13 @@
 #define SHIFT 7
 
 void decrypt(char *buffer, int size) {
-  for(int i=0; i<size; i++) {
-    if(buffer[i] >= 'A' && buffer[i] <= 'Z') {
-      buffer[i] = ((buffer[i] - 'A' - SHIFT) % 26) + 'A';
+  for (int i = 0; i < size; i++) {
+    if (isupper(buffer[i])) {
+      buffer[i] = ((buffer[i] - 'A' - SHIFT + 26) % 26) + 'A';
+    } else if (islower(buffer[i])) {
+      buffer[i] = ((buffer[i] - 'a' - SHIFT + 26) % 26) + 'a';
     }
+    // Ignore non-alphabetic characters
   }
 }
 
