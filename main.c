@@ -9,7 +9,7 @@
 
 int main(){
     int serialPort = initSerialComm();
-    char word[] = "Arduino";
+    char word[] = "Arduino\n";
     sendCommand(serialPort, word);
 
     return 0;
