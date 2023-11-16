@@ -9,7 +9,7 @@
 
 int main(){
     int serialPort = initSerialComm();
-    char num[4] = {'hola'};
+    char num[1] = {'h'};
     sendCommand(serialPort, num);
     readResp(serialPort);
 

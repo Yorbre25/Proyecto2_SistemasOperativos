@@ -52,8 +52,11 @@ int sendCommand(int serialPort, const char* command) {
 }
 
 int readResp(int serialPort){
+    FILE *filePointer;
+    filePointer = fopen("/dev/ttyACM0", "r");
+
     char line[256];
-    if (fgets(line, sizeof(line), serialPort) != NULL) {
+    if (fgets(line, sizeof(line), filePointer) != NULL) {
         printf("First line: %s\n", line);
     } else {
         printf("The file is empty\n");
