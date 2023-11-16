@@ -38,7 +38,7 @@
 #include <linux/idr.h>
 #include <linux/list.h>
 
-#include "cdc-acm-pro.h"
+#include "driverOS.h"
 
 
 #define DRIVER_AUTHOR "Armin Fuerst, Pavel Machek, Johannes Erdfelt, Vojtech Pavlik, David Kubicek, Johan Hovold"
@@ -1985,7 +1985,7 @@ static const struct usb_device_id acm_ids[] = {
 MODULE_DEVICE_TABLE(usb, acm_ids);
 
 static struct usb_driver acm_driver = {
-	.name =		"cdc_acm-pro",
+	.name =		"driverOS",
 	.probe =	acm_probe,
 	.disconnect =	acm_disconnect,
 #ifdef CONFIG_PM

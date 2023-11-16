@@ -1,4 +1,4 @@
-obj-m += cdc-acm-pro.o
+obj-m += driverOS.o
 
 all: build
 
