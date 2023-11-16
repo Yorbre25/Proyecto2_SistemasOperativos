@@ -40,7 +40,7 @@ int openSerialPort() {
     return serialPort;
 }
 
-int sendCommand(int serialPort, const char* command) {
+int sendCommand(int serialPort, char* command) {
     int len = strlen(command);
     int n = write(serialPort, command, len);
     usleep( 2 * 100000 );  // wait 1 msec try again
@@ -48,20 +48,19 @@ int sendCommand(int serialPort, const char* command) {
         perror("serialport_write: couldn't write whole string\n");
         return -1;
     }
-    return 0;
 }
 
-int readResp(int serialPort){
-    FILE *filePointer;
-    filePointer = fopen("/dev/ttyACM0", "r");
+// int readResp(int serialPort){
+//     FILE *filePointer;
+//     filePointer = fopen("/dev/ttyACM0", "r");
 
-    char line[256];
-    if (fgets(line, sizeof(line), filePointer) != NULL) {
-        printf("First line: %s\n", line);
-    } else {
-        printf("The file is empty\n");
-    }
-}
+//     char line[256];
+//     if (fgets(line, sizeof(line), filePointer) != NULL) {
+//         printf("First line: %s\n", line);
+//     } else {
+//         printf("The file is empty\n");
+//     }
+// }
 
 int sendMostFrecuentWord(int serialPort){
     FILE *filePointer;

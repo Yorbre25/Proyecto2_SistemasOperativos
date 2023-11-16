@@ -4,6 +4,7 @@
 
 int initSerialComm();
 int sendMostFrecuentWord(int serialPort);
-int sendCommand(int serialPort, const char* command);
+// int readResp(int serialPort);
+int sendCommand(int serialPort, char* command);
 
 #endif 
