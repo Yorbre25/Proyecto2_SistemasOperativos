@@ -100,9 +100,15 @@ int main(int argc, char **argv) {
     // Find the most repeated word in the sorted array
     char *most_repeated_word = find_most_repeated_word(words, num_words);
 
-    // Print the result
+    // Write the result to a file named "lastCount.txt"
     if (rank == 0) {
-        printf("The most repeated word in the file %s is: %s\n", filename, most_repeated_word);
+        FILE *result_file = fopen("lastCount.txt", "w");
+        if (result_file != NULL) {
+            fprintf(result_file, "The most repeated word in the file %s is: %s\n", filename, most_repeated_word);
+            fclose(result_file);
+        } else {
+            printf("Error: cannot create result file 'lastCount.txt'\n");
+        }
     }
 
     // Free the memory
