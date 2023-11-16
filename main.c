@@ -9,9 +9,10 @@
 
 int main(){
     int serialPort = initSerialComm();
-    // char num[1] = {'1'};
-    // sendCommand(serialPort, num);
+    char num[4] = {'hola'};
+    sendCommand(serialPort, num);
+    readResp(serialPort);
 
-    sendMostFrecuentWord(serialPort);
+    // sendMostFrecuentWord(serialPort);
     return 0;
 }

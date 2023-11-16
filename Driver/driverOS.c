@@ -1,20 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0+
-/*
- * cdc-acm.c
- *
- * Copyright (c) 1999 Armin Fuerst	<fuerst@in.tum.de>
- * Copyright (c) 1999 Pavel Machek	<pavel@ucw.cz>
- * Copyright (c) 1999 Johannes Erdfelt	<johannes@erdfelt.com>
- * Copyright (c) 2000 Vojtech Pavlik	<vojtech@suse.cz>
- * Copyright (c) 2004 Oliver Neukum	<oliver@neukum.name>
- * Copyright (c) 2005 David Kubicek	<dave@awk.cz>
- * Copyright (c) 2011 Johan Hovold	<jhovold@gmail.com>
- *
- * USB Abstract Control Model driver for USB modems and ISDN adapters
- *
- * Sponsored by SuSE
- */
-
 #undef DEBUG
 #undef VERBOSE_DEBUG
 
@@ -41,21 +24,21 @@
 #include "driverOS.h"
 
 
-#define DRIVER_AUTHOR "Armin Fuerst, Pavel Machek, Johannes Erdfelt, Vojtech Pavlik, David Kubicek, Johan Hovold"
+#define DRIVER_AUTHOR "Yordi Brenes, Jonathan "
 #define DRIVER_DESC "USB Abstract Control Model driver for USB modems and ISDN adapters"
 
+//Se declara los structs del USB y del TTY
 static struct usb_driver acm_driver;
 static struct tty_driver *acm_tty_driver;
 
+//Definir los Intger ID Resolver para los minor numbers
 static DEFINE_IDR(acm_minors);
 static DEFINE_MUTEX(acm_minors_lock);
 
 static void acm_tty_set_termios(struct tty_struct *tty,
 				const struct ktermios *termios_old);
 
-/*
- * acm_minors accessors
- */
+
 
 /*
  * Look up an ACM structure by minor. If found and not disconnected, increment

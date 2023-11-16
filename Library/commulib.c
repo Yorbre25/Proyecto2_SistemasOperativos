@@ -51,6 +51,15 @@ int sendCommand(int serialPort, const char* command) {
     return 0;
 }
 
+int readResp(int serialPort){
+    char line[256];
+    if (fgets(line, sizeof(line), serialPort) != NULL) {
+        printf("First line: %s\n", line);
+    } else {
+        printf("The file is empty\n");
+    }
+}
+
 int sendMostFrecuentWord(int serialPort){
     FILE *filePointer;
 
