@@ -79,17 +79,27 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    // Read the file content into a buffer
+    // Get file size
     fseek(file, 0, SEEK_END);
     long file_size = ftell(file);
     fseek(file, 0, SEEK_SET);
-    char *buffer = malloc(file_size + 1);
-    fread(buffer, 1, file_size, file);
-    buffer[file_size] = '\0';
+
+    // Calculate chunk size for each process
+    long chunk_size = (file_size + size - 1) / size; // Ensure that every process gets some data
+
+    // Allocate buffer for each process
+    char *buffer = (char *)malloc(chunk_size + 1);
+
+    // Read the corresponding chunk of the file
+    fseek(file, rank * chunk_size, SEEK_SET);
+    long read_size = fread(buffer, 1, chunk_size, file);
     fclose(file);
 
+    // Ensure null-terminated string
+    buffer[chunk_size] = '\0';
+
     // Decrypt the buffer
-    for (int i = 0; i < file_size; i++) {
+    for (int i = 0; i < chunk_size; i++) {
         if (isupper(buffer[i])) {
             buffer[i] = ((buffer[i] - 'A' - SHIFT + 26) % 26) + 'A';
         } else if (islower(buffer[i])) {
@@ -98,18 +108,25 @@ int main(int argc, char **argv) {
         // Ignore non-alphabetic characters
     }
 
-    // Write the decrypted content to a file
-    FILE *decrypted_file = fopen("decrypted.txt", "w");
-    if (decrypted_file != NULL) {
-        fwrite(buffer, file_size, 1, decrypted_file);
-        fclose(decrypted_file);
-    } else {
-        if (rank == 0) {
+    // Gather decrypted data to the root (rank 0) process
+    char *decrypted_buffer = NULL;
+    if (rank == 0) {
+        decrypted_buffer = (char *)malloc(file_size + 1);
+    }
+
+    MPI_Gather(buffer, read_size, MPI_CHAR, decrypted_buffer, chunk_size, MPI_CHAR, 0, MPI_COMM_WORLD);
+
+    // Write the decrypted content to a file by the root process
+    if (rank == 0) {
+        FILE *decrypted_file = fopen("decrypted.txt", "w");
+        if (decrypted_file != NULL) {
+            fwrite(decrypted_buffer, file_size, 1, decrypted_file);
+            fclose(decrypted_file);
+        } else {
             printf("Error: cannot create decrypted file 'decrypted.txt'\n");
         }
-        free(buffer);
-        MPI_Finalize();
-        return 0;
+
+        free(decrypted_buffer);
     }
 
     free(buffer);
@@ -129,7 +146,7 @@ int main(int argc, char **argv) {
     fseek(decrypted_fp, 0, SEEK_END);
     long decrypted_size = ftell(decrypted_fp);
     fseek(decrypted_fp, 0, SEEK_SET);
-    char *decrypted_buffer = malloc(decrypted_size + 1);
+    decrypted_buffer = malloc(decrypted_size + 1);
     fread(decrypted_buffer, 1, decrypted_size, decrypted_fp);
     decrypted_buffer[decrypted_size] = '\0';
     fclose(decrypted_fp);
