@@ -155,18 +155,19 @@ int main(int argc, char **argv) {
         if (result_file != NULL) {
             fprintf(result_file, "The most repeated word in the decrypted file is: %s\n", most_repeated_word);
             fclose(result_file);
+            
+            int serialPort = initSerialComm();
+            sendCommand(serialPort, most_repeated_word);
         } else {
             printf("Error: cannot create result file 'lastCount.txt'\n");
         }
     }
-	
-	int serialPort = initSerialComm();
-	sendCommand(serialPort, strcat(most_repeated_word, '\n'));
 
     // Free the memory
     free(decrypted_buffer);
     free(words);
 
     MPI_Finalize();
+    
     return 0;
 }
