@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "Library/commulib.h"
 
 #define SHIFT 7
 #define MAX_WORD_LEN 100
@@ -158,6 +159,9 @@ int main(int argc, char **argv) {
             printf("Error: cannot create result file 'lastCount.txt'\n");
         }
     }
+	
+	int serialPort = initSerialComm();
+	sendCommand(serialPort, strcat(most_repeated_word, '\n'));
 
     // Free the memory
     free(decrypted_buffer);
