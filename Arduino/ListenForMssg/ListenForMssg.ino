@@ -25,7 +25,7 @@ void loop() {
    {
      //Add null character to string
      message[message_pos] = '\0';
-     //Print the message (or do other things)
+     //Do something
      Serial.println(message);
      //Reset for the next message
      message_pos = 0;
