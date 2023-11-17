@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h> // Include ctype.h for isupper and islower functions
 
 #define SHIFT 7
 
@@ -14,50 +15,78 @@ void encrypt(char *buffer, int size) {
     }
 }
 
-int main(int argc, char** argv) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
-        return 1;
-    }
+void displayMenu() {
+    printf("1. Encrypt a file\n");
+    printf("2. Add additional features (not implemented yet)\n");
+    printf("0. Exit\n");
+}
 
-    char *filename = argv[1];
+int main() {
+    int choice;
+    char filename[100]; // Assuming a maximum filename length of 100 characters
 
-    FILE *fp = fopen(filename, "r");
-    if (fp == NULL) {
-        perror("Error opening input file");
-        return 1;
-    }
+    do {
+        displayMenu();
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
-    fseek(fp, 0L, SEEK_END);
-    long file_size = ftell(fp);
+        switch (choice) {
+            case 1:
+                printf("Enter the filename: ");
+                scanf("%s", filename);
 
-    fseek(fp, 0L, SEEK_SET);
+                FILE *fp = fopen(filename, "r");
+                if (fp == NULL) {
+                    perror("Error opening input file");
+                    break;
+                }
 
-    char *buffer = malloc(file_size);
-    if (buffer == NULL) {
-        perror("Memory allocation error");
-        fclose(fp);
-        return 1;
-    }
+                fseek(fp, 0L, SEEK_END);
+                long file_size = ftell(fp);
 
-    fread(buffer, file_size, 1, fp);
-    fclose(fp);
+                fseek(fp, 0L, SEEK_SET);
 
-    encrypt(buffer, file_size);
+                char *buffer = malloc(file_size);
+                if (buffer == NULL) {
+                    perror("Memory allocation error");
+                    fclose(fp);
+                    break;
+                }
 
-    FILE *out = fopen("encrypted.txt", "w");
-    if (out == NULL) {
-        perror("Error opening output file");
-        free(buffer);
-        return 1;
-    }
+                fread(buffer, file_size, 1, fp);
+                fclose(fp);
 
-    fwrite(buffer, file_size, 1, out);
-    fclose(out);
+                encrypt(buffer, file_size);
 
-    free(buffer);
+                FILE *out = fopen("encrypted.txt", "w");
+                if (out == NULL) {
+                    perror("Error opening output file");
+                    free(buffer);
+                    break;
+                }
 
-    printf("File encrypted successfully!\n");
+                fwrite(buffer, file_size, 1, out);
+                fclose(out);
+
+                free(buffer);
+
+                printf("File encrypted successfully!\n");
+                break;
+
+            case 2:
+                // Add additional features here in the future
+                printf("Additional features not implemented yet.\n");
+                break;
+
+            case 0:
+                printf("Exiting program. Goodbye!\n");
+                break;
+
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+
+    } while (choice != 0);
 
     return 0;
 }
